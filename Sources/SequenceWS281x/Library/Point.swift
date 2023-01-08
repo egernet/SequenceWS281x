@@ -1,0 +1,29 @@
+//
+//  Point.swift
+//  
+//
+//  Created by Christian Skaarup Enevoldsen on 08/01/2023.
+//
+
+import Foundation
+
+struct Point {
+    let x: Int
+    let y: Int
+
+    /**
+     * ...
+     * a + b
+     */
+    static func + (left: Point, right: Point) -> Point {
+        return .init(x: left.x + right.x, y: left.y + right.y)
+    }
+
+    /**
+     * ...
+     * a += b
+     */
+    static func += (left: inout Point, right: Point) {
+        left = left + right
+    }
+}

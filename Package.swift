@@ -3,13 +3,18 @@
 
 import PackageDescription
 
-let package = Package(name: "rpi-ws281x-swift",
+let package = Package(
+  name: "SequenceWS281x",
   products: [
-    .library(name: "rpi-ws281x-swift", targets: ["rpi-ws281x-swift"]),
+    .executable(name: "SequenceWS281x", targets: ["SequenceWS281x"]),
+    .library(name: "rpi-ws281x-swift", targets: ["rpi-ws281x-swift"])
   ],
-  dependencies: [],
+  dependencies: [
+  ],
   targets: [
+    .target(name: "rpi-ws281x", path: "Sources/rpi-ws281x"),
     .target(name: "rpi-ws281x-swift", dependencies: ["rpi-ws281x"], path: "Sources/rpi-ws281x-swift"),
-    .target(name: "rpi-ws281x", path: "Sources/rpi-ws281x")
+
+    .executableTarget(name: "SequenceWS281x", dependencies: ["rpi-ws281x-swift"], path: "Sources/SequenceWS281x")
   ]
 )

@@ -27,6 +27,7 @@
  *
  */
 
+#ifndef __APPLE__
 
 #include <stdint.h>
 #include <stdio.h>
@@ -50,8 +51,29 @@
 #include "pcm.h"
 #include "rpihw.h"
 
+#endif
+
 #include "ws2811.h"
 
+#ifdef __APPLE__
+
+ws2811_return_t ws2811_init(ws2811_t *ws2811) {
+    return WS2811_SUCCESS;
+}
+
+void ws2811_fini(ws2811_t *ws2811) {}
+ws2811_return_t ws2811_render(ws2811_t *ws2811) {
+    return WS2811_SUCCESS;
+}
+ws2811_return_t ws2811_wait(ws2811_t *ws2811) {
+    return WS2811_SUCCESS;
+}
+const char * ws2811_get_return_t_str(const ws2811_return_t state) {
+    return 0xFF;
+}
+void ws2811_set_custom_gamma_factor(ws2811_t *ws2811, double gamma_factor) {}
+
+#else
 
 #define BUS_TO_PHYS(x)                           ((x)&~0xC0000000)
 
@@ -826,7 +848,7 @@ static ws2811_return_t spi_init(ws2811_t *ws2811)
     memset(channel->leds, 0, sizeof(ws2811_led_t) * channel->count);
     if (!channel->strip_type)
     {
-      channel->strip_type=WS2811_STRIP_RGB;
+      channel->strip_type=SK6812W_STRIP;
     }
 
     // Set default uncorrected gamma table
@@ -992,7 +1014,7 @@ ws2811_return_t ws2811_init(ws2811_t *ws2811)
 
         if (!channel->strip_type)
         {
-          channel->strip_type=WS2811_STRIP_RGB;
+          channel->strip_type=SK6812W_STRIP;
         }
 
         // Set default uncorrected gamma table
@@ -1303,3 +1325,5 @@ void ws2811_set_custom_gamma_factor(ws2811_t *ws2811, double gamma_factor)
 
     }
 }
+
+#endif

@@ -30,10 +30,13 @@
 
 #include <stdint.h>
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
 #include <errno.h>
+
+#ifndef __APPLE__
+#include <string.h>
 #include <byteswap.h>
+#endif
 
 #include "rpihw.h"
 
@@ -528,7 +531,11 @@ const rpi_hw_t *rpi_hw_detect(void)
     if (read != sizeof(uint32_t))
         goto done;
     #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+        #ifdef __APPLE__
+        rev = 0xA03111;  // RPI 4
+        #else
         rev = bswap_32(rev);  // linux,revision appears to be in big endian
+        #endif
     #endif
 
     for (i = 0; i < (sizeof(rpi_hw_info) / sizeof(rpi_hw_info[0])); i++)
