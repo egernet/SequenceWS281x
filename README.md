@@ -1,7 +1,6 @@
 # SequenceWS281x
 
 Swift wrapper for [rpi-ws281x-swift](https://github.com/apocolipse/rpi-ws281x-swift)
-See also [SwiftyGPIO](https://github.com/uraimo/SwiftyGPIO)
 
 ## To run
 
@@ -17,3 +16,9 @@ The demo will show a matrix of 3 x 55 LED
 <picture>
   <img alt="Demo gif" width="450" src="/../main/demo.gif">
 </picture>
+
+</br>
+</br>
+</br>
+
+See also [SwiftyGPIO](https://github.com/uraimo/SwiftyGPIO)
