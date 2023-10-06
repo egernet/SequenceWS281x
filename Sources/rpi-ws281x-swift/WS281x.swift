@@ -162,7 +162,7 @@ public enum WSKind {
         case .WS2812:
             return SK6812_STRIP
         case .WS2812B:
-            return Int32(SK6812_SHIFT_WMASK)
+            return SK6812_STRIP_RGBW
         case .WS2812B2017:
             return SK6812_STRIP_RGBW
         case .WS2812S:
