@@ -13,11 +13,13 @@ public struct SequenceWS281x {
             RainbowCycleSequence(numberOfLeds: numberOfLeds, matrixWidth: matrixWidth)
         ]
 
-        let controller: WS281xController = .init(sequences: sequences, numberOfLeds: numberOfLeds, matrixWidth: matrixWidth)
-        controller.start()
+#if os(OSX)
+        let controller: LedControllerProtocol = WindowController(sequences: sequences, numberOfLeds: numberOfLeds, matrixWidth: matrixWidth)
+//        let controller: LedControllerProtocol = ConsoleController(sequences: sequences, numberOfLeds: numberOfLeds, matrixWidth: matrixWidth)
+#else
+        let controller: LedControllerProtocol = WS281xController(sequences: sequences, numberOfLeds: numberOfLeds, matrixWidth: matrixWidth)
+#endif
 
-        while(true) {
-            controller.runSequence()
-        }
+        controller.start()
     }
 }

@@ -1,24 +1,14 @@
 //
-//  File.swift
-//  
+//  ConsoleController.swift
 //
-//  Created by Christian Skaarup Enevoldsen on 07/01/2023.
+//
+//  Created by Christian Skaarup Enevoldsen on 05/10/2023.
 //
 
 import Foundation
 import rpi_ws281x_swift
 
-protocol LedControllerProtocol {
-    var numberOfLeds: Int { get }
-    var matrixWidth: Int { get }
-    var sequences: [SequenceType] { get }
-
-    func start()
-    func runSequence()
-}
-
-class WS281xController: LedControllerProtocol {
-    private let strip: PixelStrip
+class ConsoleController: LedControllerProtocol {
     let numberOfLeds: Int
     let matrixWidth: Int
     let sequences: [SequenceType]
@@ -27,13 +17,6 @@ class WS281xController: LedControllerProtocol {
         self.numberOfLeds = numberOfLeds
         self.matrixWidth = matrixWidth
         self.sequences = sequences
-        
-        let strip = PixelStrip(numLEDs: Int32(numberOfLeds),
-                               pin: 18,
-                               stripType: .WS2812B,
-                               brightness: 40)
-
-        self.strip = strip
 
         setup()
     }
@@ -44,9 +27,7 @@ class WS281xController: LedControllerProtocol {
         }
     }
 
-    func start() {
-        strip.begin()
-
+    func start() { 
         while(true) {
             runSequence()
         }
@@ -59,13 +40,15 @@ class WS281xController: LedControllerProtocol {
     }
 
     private func updatePixels() {
-        strip.show()
+        let point = Point(x: 0, y: 1)
+        Console.moveCursor(point)
     }
 
     private func setPixelColor(point: Point, color: Color) {
-        let count = numberOfLeds / matrixWidth
-        let postion = point.x + (count * point.y)
-        strip.setPixelColor(pos: postion, color: color)
+        if point.x == 0 && point.y > 0 {
+            Console.writeLine("")
+        }
+        Console.write("● ", color: color)
     }
 
     private func setPixelColor(pos: Int, color: Color) {
@@ -76,7 +59,7 @@ class WS281xController: LedControllerProtocol {
     }
 }
 
-extension WS281xController: SequenceDelegate {
+extension ConsoleController: SequenceDelegate {
     func sequenceUpdatePixels(_ sequence: SequenceType) {
         updatePixels()
     }
