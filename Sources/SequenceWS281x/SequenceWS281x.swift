@@ -33,7 +33,7 @@ struct SequenceWS281x: ParsableCommand {
     var mode: String = "real"
 
     @Option(help: "Matrix width")
-    var matrixWidth: Int
+    var matrixWidth: Int = 1
 
     @Option(help: "Number of leds")
     var numberOfLeds: Int = 10
