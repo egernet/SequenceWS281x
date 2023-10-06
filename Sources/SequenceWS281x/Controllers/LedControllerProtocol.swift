@@ -1,6 +1,5 @@
 //
 //  LedControllerProtocol.swift
-//  
 //
 //  Created by Christian Skaarup Enevoldsen on 06/10/2023.
 //

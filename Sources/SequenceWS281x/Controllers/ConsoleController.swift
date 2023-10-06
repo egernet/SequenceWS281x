@@ -12,6 +12,7 @@ class ConsoleController: LedControllerProtocol {
     let numberOfLeds: Int
     let matrixWidth: Int
     let sequences: [SequenceType]
+    let stop = false
 
     init(sequences: [SequenceType], numberOfLeds: Int, matrixWidth: Int) {
         self.numberOfLeds = numberOfLeds
@@ -27,8 +28,8 @@ class ConsoleController: LedControllerProtocol {
         }
     }
 
-    func start() { 
-        while(true) {
+    func start() {
+        while stop == false {
             runSequence()
         }
     }

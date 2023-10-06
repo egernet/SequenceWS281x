@@ -1,6 +1,5 @@
 //
-//  File.swift
-//  
+//  WS281xController.swift
 //
 //  Created by Christian Skaarup Enevoldsen on 07/01/2023.
 //
@@ -13,16 +12,19 @@ class WS281xController: LedControllerProtocol {
     let numberOfLeds: Int
     let matrixWidth: Int
     let sequences: [SequenceType]
+    let stop = false
 
     init(sequences: [SequenceType], numberOfLeds: Int, matrixWidth: Int) {
         self.numberOfLeds = numberOfLeds
         self.matrixWidth = matrixWidth
         self.sequences = sequences
         
-        let strip = PixelStrip(numLEDs: Int32(numberOfLeds),
-                               pin: 18,
-                               stripType: .WS2812B,
-                               brightness: 40)
+        let strip = PixelStrip(
+            numLEDs: Int32(numberOfLeds),
+            pin: 18,
+            stripType: .WS2812B,
+            brightness: 40
+        )
 
         self.strip = strip
 
@@ -38,7 +40,7 @@ class WS281xController: LedControllerProtocol {
     func start() {
         strip.begin()
 
-        while(true) {
+        while stop == false {
             runSequence()
         }
     }

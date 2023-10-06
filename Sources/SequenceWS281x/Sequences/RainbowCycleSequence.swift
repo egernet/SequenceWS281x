@@ -1,6 +1,5 @@
 //
 //  RainbowCycleSequence.swift
-//  
 //
 //  Created by Christian Skaarup Enevoldsen on 08/01/2023.
 //
@@ -40,14 +39,12 @@ final class RainbowCycleSequence: SequenceType {
     private func wheel(_ position: Int) -> Color {
         var position: UInt8 = UInt8(position)
 
-        if (position < 85) {
+        if position < 85 {
             return .init(red: position * 3, green: 255 - position * 3, blue: 0)
-        }
-        else if (position < 170) {
+        } else if position < 170 {
             position -= 85
             return .init(red: 255 - position * 3, green: 0, blue: position * 3)
-        }
-        else {
+        } else {
             position -= 170
             return .init(red: 0, green: position * 3, blue: 255 - position * 3)
         }

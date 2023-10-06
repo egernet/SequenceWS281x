@@ -1,6 +1,5 @@
 //
 //  Console.swift
-//  
 //
 //  Created by Christian Skaarup Enevoldsen on 08/01/2023.
 //

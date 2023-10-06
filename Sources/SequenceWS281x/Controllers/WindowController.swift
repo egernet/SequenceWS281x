@@ -1,6 +1,5 @@
 //
 //  File.swift
-//  
 //
 //  Created by Christian Skaarup Enevoldsen on 05/10/2023.
 //
@@ -28,7 +27,7 @@ class WindowController: LedControllerProtocol {
 
         let rowNumber = numberOfLeds / matrixWidth
         let mask: NSWindow.StyleMask = [.titled, .closable]
-        let rect = NSMakeRect(0, 0, CGFloat(rowNumber) * ledSize, CGFloat(matrixWidth) * ledSize)
+        let rect: NSRect = .init(x: 0, y: 0, width: CGFloat(rowNumber) * ledSize, height: CGFloat(matrixWidth) * ledSize)
         self.window = NSWindow(contentRect: rect, styleMask: mask, backing: NSWindow.BackingStoreType.buffered, defer: false)
         self.window.title = "SequenceWS281x"
 
@@ -46,7 +45,7 @@ class WindowController: LedControllerProtocol {
         }
     }
 
-    func start() { 
+    func start() {
         window.makeKeyAndOrderFront(self)
 
         let application = NSApplication.shared
@@ -98,12 +97,11 @@ extension WindowController: SequenceDelegate {
     }
 }
 
-class LEDView : NSView {
+class LEDView: NSView {
     var leds: [Point: CAShapeLayer] = [:]
     var colors: [Color] = []
 
     func setup(numberOfLeds: Int, matrixWidth: Int, size: CGFloat) {
-        let radius = size / 2
         let count = numberOfLeds / matrixWidth
 
         let mainlayer = CALayer()
@@ -132,13 +130,15 @@ class LEDView : NSView {
 
 class ApplicationDelegate: NSObject, NSApplicationDelegate {
     var controller: LedControllerProtocol
+    var stop = false
+
     init(controller: LedControllerProtocol) {
         self.controller = controller
     }
 
     func applicationWillFinishLaunching(_ notification: Notification) {
         DispatchQueue.global().async {
-            while(true) {
+            while self.stop == false {
                 self.controller.runSequence()
             }
         }
@@ -155,7 +155,8 @@ extension Color {
             red: CGFloat(red) / 255,
             green: CGFloat(green) / 255,
             blue: CGFloat(blue) / 255,
-            alpha: 1.0)
+            alpha: 1.0
+        )
     }
 }
 

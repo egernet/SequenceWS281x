@@ -1,8 +1,38 @@
+import ArgumentParser
 import Foundation
 
 @main
-public struct SequenceWS281x {
-    public static func main() {
+struct SequenceWS281x: ParsableCommand {
+    enum SequenceWS281xMode: String {
+        case real
+        case app
+        case console
+
+        static func mode(_ string: String?) -> SequenceWS281xMode {
+            switch string {
+            case SequenceWS281xMode.real.rawValue:
+                return .real
+            case SequenceWS281xMode.app.rawValue:
+                return .app
+            case SequenceWS281xMode.console.rawValue:
+                return .console
+            default:
+                return .real
+            }
+        }
+    }
+
+    static var configuration = CommandConfiguration(
+        commandName: "sequenceWS281x",
+        abstract: "Run sequence for WS281x",
+        version: "1.0",
+        subcommands: []
+    )
+
+    @Argument(help: "Executes mode: [real, app, console]")
+    var mode: String?
+
+    func run() {
         print("\u{1B}[2J")
         print("\u{1B}[\(1);\(0)HLED will start:")
 
@@ -13,12 +43,18 @@ public struct SequenceWS281x {
             RainbowCycleSequence(numberOfLeds: numberOfLeds, matrixWidth: matrixWidth)
         ]
 
-#if os(OSX)
-        let controller: LedControllerProtocol = WindowController(sequences: sequences, numberOfLeds: numberOfLeds, matrixWidth: matrixWidth)
-//        let controller: LedControllerProtocol = ConsoleController(sequences: sequences, numberOfLeds: numberOfLeds, matrixWidth: matrixWidth)
-#else
-        let controller: LedControllerProtocol = WS281xController(sequences: sequences, numberOfLeds: numberOfLeds, matrixWidth: matrixWidth)
-#endif
+        let executesMode: SequenceWS281xMode = .mode(mode)
+
+        let controller: LedControllerProtocol
+
+        switch executesMode {
+        case .real:
+            controller = WS281xController(sequences: sequences, numberOfLeds: numberOfLeds, matrixWidth: matrixWidth)
+        case .app:
+            controller = WindowController(sequences: sequences, numberOfLeds: numberOfLeds, matrixWidth: matrixWidth)
+        case .console:
+            controller = ConsoleController(sequences: sequences, numberOfLeds: numberOfLeds, matrixWidth: matrixWidth)
+        }
 
         controller.start()
     }
