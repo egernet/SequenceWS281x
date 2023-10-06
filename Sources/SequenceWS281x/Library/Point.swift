@@ -27,3 +27,9 @@ struct Point {
         left = left + right
     }
 }
+
+extension Point: Hashable {
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        return lhs.x == rhs.x && lhs.y == rhs.y
+    }
+}

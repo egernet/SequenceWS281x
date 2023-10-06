@@ -8,15 +8,6 @@
 import Foundation
 import rpi_ws281x_swift
 
-protocol LedControllerProtocol {
-    var numberOfLeds: Int { get }
-    var matrixWidth: Int { get }
-    var sequences: [SequenceType] { get }
-
-    func start()
-    func runSequence()
-}
-
 class WS281xController: LedControllerProtocol {
     private let strip: PixelStrip
     let numberOfLeds: Int
