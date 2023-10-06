@@ -5,9 +5,11 @@
 //
 
 import Foundation
+import rpi_ws281x_swift
+
+#if os(OSX)
 import Cocoa
 import CoreGraphics
-import rpi_ws281x_swift
 
 class WindowController: LedControllerProtocol {
     let numberOfLeds: Int
@@ -165,3 +167,11 @@ extension Point {
         return CGPoint(x: x, y: y)
     }
 }
+
+#else
+
+class WindowController: ConsoleController {
+
+}
+
+#endif
