@@ -52,7 +52,9 @@ class WS281xController: LedControllerProtocol {
     }
 
     private func updatePixels() {
-        strip.show()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.strip.show()
+        }
     }
 
     private func setPixelColor(point: Point, color: Color) {

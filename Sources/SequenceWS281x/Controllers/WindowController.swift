@@ -154,9 +154,9 @@ class ApplicationDelegate: NSObject, NSApplicationDelegate {
 extension Color {
     var cgColor: CGColor {
         return CGColor(
-            red: CGFloat(red) / 255,
-            green: CGFloat(green) / 255,
-            blue: CGFloat(blue) / 255,
+            red: CGFloat(red | white) / 255,
+            green: CGFloat(green | white) / 255,
+            blue: CGFloat(blue | white) / 255,
             alpha: 1.0
         )
     }
@@ -170,8 +170,6 @@ extension Point {
 
 #else
 
-class WindowController: ConsoleController {
-
-}
+class WindowController: ConsoleController { }
 
 #endif

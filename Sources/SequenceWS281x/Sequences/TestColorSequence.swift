@@ -11,7 +11,7 @@ final class TestColorSequence: SequenceType {
     var delegate: SequenceDelegate?
     let numberOfLeds: Int
     let matrixWidth: Int
-    let colors: [Color] = [.red, .green, .blue, .white, .black]
+    let colors: [Color] = [.red, .green, .blue, .trueWhite, .black]
 
     init(numberOfLeds: Int, matrixWidth: Int) {
         self.numberOfLeds = numberOfLeds
