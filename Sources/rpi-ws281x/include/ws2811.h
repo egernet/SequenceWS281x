@@ -63,7 +63,7 @@ extern "C" {
 // predefined fixed LED types
 #define WS2812_STRIP                             WS2811_STRIP_GRB
 #define SK6812_STRIP                             WS2811_STRIP_GRB
-#define SK6812W_STRIP                            SK6812_STRIP_RGBW
+#define SK6812W_STRIP                            SK6812_STRIP_GRBW
 
 struct ws2811_device;
 
