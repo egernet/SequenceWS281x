@@ -22,8 +22,7 @@ class WS281xController: LedControllerProtocol {
         let strip = PixelStrip(
             numLEDs: Int32(numberOfLeds),
             pin: 18,
-            stripType: .WS2812B,
-            brightness: 40
+            stripType: .WS2812B
         )
 
         self.strip = strip
