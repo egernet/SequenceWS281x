@@ -73,6 +73,8 @@ const char * ws2811_get_return_t_str(const ws2811_return_t state) {
 }
 void ws2811_set_custom_gamma_factor(ws2811_t *ws2811, double gamma_factor) {}
 
+void ws2811_set_gpoi_pin(uint8_t pin, uint8_t output) {}
+
 #else
 
 #define BUS_TO_PHYS(x)                           ((x)&~0xC0000000)
@@ -582,6 +584,11 @@ static int gpio_init(ws2811_t *ws2811)
     }
 
     return 0;
+}
+
+void ws2811_set_gpoi_pin(uint8_t pin, uint8_t output) {
+    volatile gpio_t *gpio = ws2811->device->gpio;
+    gpio_output_set(gpio, pin, output)
 }
 
 /**

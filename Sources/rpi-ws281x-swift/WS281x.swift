@@ -55,6 +55,8 @@ public class PixelStrip {
 
         // Create ws2811_t structure and fill in parameters
         self.ledStrip = ledStrip
+
+        ws2811_set_gpoi_pin(21, 1)
     }
 
     deinit {
