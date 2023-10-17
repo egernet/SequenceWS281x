@@ -170,8 +170,6 @@ extension Point {
 
 #else
 
-class WindowController: ConsoleController {
-
-}
+class WindowController: ConsoleController {}
 
 #endif
