@@ -86,7 +86,7 @@ public class PixelStrip {
     }
 
     public func setPixelColor(pos: Int, color: Color) {
-        ledStrip.channel[keyPath: self.channel][pos] = ws2811_led_t(color: color)
+        ledStrip.channel[keyPath: self.channel].leds[pos] = ws2811_led_t(color: color)
     }
 
     public var brightness: UInt8 {
