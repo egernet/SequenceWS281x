@@ -28,37 +28,37 @@ final class FadeColorSequence: SequenceType {
 
     private func switchColor() {
         for i in 0..<numberOfLeds {
-            if ledInLive == i {
-                delegate?.sequenceSetPixelColor(self, pos: i, color: .red)
+            if i % 2 == 0 {
+                delegate?.sequenceSetPixelColor(self, pos: i, color: color)
             } else {
                 delegate?.sequenceSetPixelColor(self, pos: i, color: .green)
             }
         }
 
         delegate?.sequenceUpdatePixels(self)
-        Thread.sleep(forTimeInterval: 0.1)
+        Thread.sleep(forTimeInterval: 0.01)
 
         ledInLive = ledInLive + 1
         if ledInLive == numberOfLeds {
             ledInLive = 0
         }
 
-//        var colorInt: Int = Int(color.red)
-//
-//        if goUp {
-//            colorInt = colorInt + 1
-//        } else {
-//            colorInt = colorInt - 1
-//        }
-//
-//        if colorInt >= 255 {
-//            colorInt = 255
-//            goUp = false
-//        } else if colorInt <= 0 {
-//            colorInt = 0
-//            goUp = true
-//        }
-//
-//        color.red = UInt8(colorInt)
+       var colorInt: Int = Int(color.red)
+
+       if goUp {
+           colorInt = colorInt + 1
+       } else {
+           colorInt = colorInt - 1
+       }
+
+       if colorInt >= 255 {
+           colorInt = 255
+           goUp = false
+       } else if colorInt <= 0 {
+           colorInt = 0
+           goUp = true
+       }
+
+       color.red = UInt8(colorInt)
     }
 }
