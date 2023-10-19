@@ -126,8 +126,6 @@ ws2811_return_t ws2811_wait(ws2811_t *ws2811);                                  
 const char * ws2811_get_return_t_str(const ws2811_return_t state);              //< Get string representation of the given return state
 void ws2811_set_custom_gamma_factor(ws2811_t *ws2811, double gamma_factor);     //< Set a custom Gamma correction array based on a gamma correction factor
 
-void ws2811_set_gpoi_pin(uint8_t pin, uint8_t output);
-
 #ifdef __cplusplus
 }
 #endif

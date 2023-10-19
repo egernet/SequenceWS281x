@@ -586,11 +586,6 @@ static int gpio_init(ws2811_t *ws2811)
     return 0;
 }
 
-void ws2811_set_gpoi_pin(uint8_t pin, uint8_t output) {
-    volatile gpio_t *gpio = ws2811->device->gpio;
-    gpio_output_set(gpio, pin, output)
-}
-
 /**
  * Initialize the PWM DMA buffer with all zeros, inverted operation will be
  * handled by hardware.  The DMA buffer length is assumed to be a word

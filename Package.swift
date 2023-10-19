@@ -32,7 +32,8 @@ let package = Package(
   ],
   dependencies: [
     .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.1.3"),
-    .package(url: "https://github.com/realm/SwiftLint", from: "0.52.2")
+    .package(url: "https://github.com/realm/SwiftLint", from: "0.52.2"),
+    .package(url: "https://github.com/uraimo/SwiftyGPIO.git", from: "1.0.0")
   ],
   targets: [
     .target(
@@ -48,7 +49,8 @@ let package = Package(
         name: "SequenceWS281x",
         dependencies: [
             argumentParser,
-            "rpi-ws281x-swift"
+            "rpi-ws281x-swift",
+            "SwiftyGPIO"
         ],
         plugins: plugins
     )
