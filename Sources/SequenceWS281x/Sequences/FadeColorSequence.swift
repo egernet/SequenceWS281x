@@ -9,14 +9,14 @@ import rpi_ws281x_swift
 
 final class FadeColorSequence: SequenceType {
     var delegate: SequenceDelegate?
-    let numberOfLeds: Int
+    let matrixHeight: Int
     let matrixWidth: Int
     var color: Color = .black
     var goUp: Bool = true
     var ledInLive: Int = 0
 
-    init(numberOfLeds: Int, matrixWidth: Int) {
-        self.numberOfLeds = numberOfLeds
+    init(matrixWidth: Int, matrixHeight: Int) {
+        self.matrixHeight = matrixHeight
         self.matrixWidth = matrixWidth
     }
 
@@ -27,6 +27,7 @@ final class FadeColorSequence: SequenceType {
     }
 
     private func switchColor() {
+        let numberOfLeds = matrixHeight * matrixWidth
         for i in 0..<numberOfLeds {
             if i.isMultiple(of: 2) {
                 delegate?.sequenceSetPixelColor(self, pos: i, color: color)
@@ -36,7 +37,6 @@ final class FadeColorSequence: SequenceType {
         }
 
         delegate?.sequenceUpdatePixels(self)
-        Thread.sleep(forTimeInterval: 0.01)
 
         ledInLive = ledInLive + 1
         if ledInLive == numberOfLeds {

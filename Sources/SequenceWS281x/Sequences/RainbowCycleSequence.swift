@@ -9,29 +9,28 @@ import rpi_ws281x_swift
 
 final class RainbowCycleSequence: SequenceType {
     var delegate: SequenceDelegate?
-    let numberOfLeds: Int
+    let matrixHeight: Int
     let matrixWidth: Int
 
-    init(numberOfLeds: Int, matrixWidth: Int) {
-        self.numberOfLeds = numberOfLeds
+    init(matrixWidth: Int, matrixHeight: Int) {
+        self.matrixHeight = matrixHeight
         self.matrixWidth = matrixWidth
     }
 
     func runSequence() {
-        rainbowCycle(numberOfLeds: numberOfLeds, matrixWidth: matrixWidth)
+        rainbowCycle(matrixWidth: matrixWidth, matrixHeight: matrixHeight)
     }
 
-    private func rainbowCycle(numberOfLeds: Int, matrixWidth: Int, iterations: Int = 1) {
-        let count = numberOfLeds / matrixWidth
+    private func rainbowCycle(matrixWidth: Int, matrixHeight: Int, iterations: Int = 1) {
         for i in 0..<255 * iterations {
             for y in 0..<matrixWidth {
-                for x in 0..<count {
-                    let index = ((x * 255 / count) + i) & 255
+                for x in 0..<matrixHeight {
+                    let index = ((x * 255 / matrixHeight) + i) & 255
                     let color = wheel(index)
                     delegate?.sequenceSetPixelColor(self, point: .init(x: x, y: y), color: color)
                 }
             }
-            Thread.sleep(forTimeInterval: 0.01)
+            
             delegate?.sequenceUpdatePixels(self)
         }
     }

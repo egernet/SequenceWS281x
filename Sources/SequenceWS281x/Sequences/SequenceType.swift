@@ -15,8 +15,8 @@ protocol SequenceDelegate: AnyObject {
 
 protocol SequenceType {
     var delegate: SequenceDelegate? {get set}
-    var numberOfLeds: Int {get}
     var matrixWidth: Int {get}
+    var matrixHeight: Int {get}
 
     func runSequence()
 }

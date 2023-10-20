@@ -12,7 +12,7 @@ import Cocoa
 import CoreGraphics
 
 class WindowController: LedControllerProtocol {
-    let numberOfLeds: Int
+    var matrixHeight: Int
     let matrixWidth: Int
     let sequences: [SequenceType]
     let ledSize: CGFloat = 30
@@ -22,14 +22,14 @@ class WindowController: LedControllerProtocol {
 
     var applicationDelegate: ApplicationDelegate?
 
-    init(sequences: [SequenceType], numberOfLeds: Int, matrixWidth: Int) {
-        self.numberOfLeds = numberOfLeds
+    init(sequences: [SequenceType], matrixWidth: Int, matrixHeight: Int) {
+        self.matrixHeight = matrixHeight
         self.matrixWidth = matrixWidth
         self.sequences = sequences
 
-        let rowNumber = numberOfLeds / matrixWidth
+        let numberOfLedOnRow = matrixHeight
         let mask: NSWindow.StyleMask = [.titled, .closable]
-        let rect: NSRect = .init(x: 0, y: 0, width: CGFloat(rowNumber) * ledSize, height: CGFloat(matrixWidth) * ledSize)
+        let rect: NSRect = .init(x: 0, y: 0, width: CGFloat(numberOfLedOnRow) * ledSize, height: CGFloat(matrixWidth) * ledSize)
         self.window = NSWindow(contentRect: rect, styleMask: mask, backing: NSWindow.BackingStoreType.buffered, defer: false)
         self.window.title = "SequenceWS281x"
 
@@ -40,7 +40,7 @@ class WindowController: LedControllerProtocol {
 
     func setup() {
         window.contentView = contentView
-        contentView.setup(numberOfLeds: numberOfLeds, matrixWidth: matrixWidth, size: ledSize)
+        contentView.setup(matrixWidth: matrixWidth, matrixHeight: matrixHeight, size: ledSize)
 
         for var sequence in sequences {
             sequence.delegate = self
@@ -69,6 +69,8 @@ class WindowController: LedControllerProtocol {
         DispatchQueue.main.async {
             self.contentView.setNeedsDisplay(self.contentView.frame)
         }
+
+        sleep(forTimeInterval: 0.01)
     }
 
     private func setPixelColor(point: Point, color: Color) {
@@ -78,10 +80,8 @@ class WindowController: LedControllerProtocol {
     }
 
     private func setPixelColor(pos: Int, color: Color) {
-        let count = numberOfLeds / matrixWidth
-        let y = pos / count
-        let x = pos - (y * count)
-        setPixelColor(point: .init(x: x, y: y), color: color)
+        let point = fromPostionToPoint(pos)
+        setPixelColor(point: point, color: color)
     }
 }
 
@@ -103,23 +103,21 @@ class LEDView: NSView {
     var leds: [Point: CAShapeLayer] = [:]
     var colors: [Color] = []
 
-    func setup(numberOfLeds: Int, matrixWidth: Int, size: CGFloat) {
-        let count = numberOfLeds / matrixWidth
-
+    func setup(matrixWidth: Int, matrixHeight: Int, size: CGFloat) {
         let mainlayer = CALayer()
         mainlayer.frame = self.bounds
 
-        for pos in 0..<numberOfLeds {
-            let y = pos / count
-            let x = pos - (y * count)
-            let point: Point = .init(x: x, y: y)
-            let frame: CGRect = .init(x: point.cgPoint.x * size, y: point.cgPoint.y * size, width: size, height: size)
+        for y in 0..<matrixWidth {
+            for x in 0..<matrixHeight {
+                let point: Point = .init(x: x, y: y)
+                let frame: CGRect = .init(x: point.cgPoint.x * size, y: point.cgPoint.y * size, width: size, height: size)
 
-            let layer = CAShapeLayer()
-            layer.path = CGPath(ellipseIn: frame, transform: nil)
-            layer.fillColor = NSColor.blue.cgColor
-            mainlayer.addSublayer(layer)
-            leds[point] = layer
+                let layer = CAShapeLayer()
+                layer.path = CGPath(ellipseIn: frame, transform: nil)
+                layer.fillColor = NSColor.blue.cgColor
+                mainlayer.addSublayer(layer)
+                leds[point] = layer
+            }
         }
 
         self.layer = mainlayer

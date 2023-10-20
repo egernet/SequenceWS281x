@@ -33,18 +33,18 @@ struct SequenceWS281x: ParsableCommand {
     var mode: String = "real"
 
     @Option(help: "Matrix width")
-    var matrixWidth: Int = 1
+    var matrixWidth: Int = 3
 
-    @Option(help: "Number of leds")
-    var numberOfLeds: Int = 20
+    @Option(help: "Matrix height")
+    var matrixHeight: Int = 10
 
     func run() {
         print("\u{1B}[2J")
         print("\u{1B}[\(1);\(0)HLED will start:")
 
         let sequences: [SequenceType] = [
-            TestColorSequence(numberOfLeds: numberOfLeds, matrixWidth: matrixWidth),
-            RainbowCycleSequence(numberOfLeds: numberOfLeds, matrixWidth: matrixWidth)
+            TestColorSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
+            RainbowCycleSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight)
         ]
 
         let executesMode: SequenceWS281xMode = .mode(mode)
@@ -53,11 +53,11 @@ struct SequenceWS281x: ParsableCommand {
 
         switch executesMode {
         case .real:
-            controller = WS281xController(sequences: sequences, numberOfLeds: numberOfLeds, matrixWidth: matrixWidth)
+            controller = WS281xController(sequences: sequences, matrixWidth: matrixWidth, matrixHeight: matrixHeight)
         case .app:
-            controller = WindowController(sequences: sequences, numberOfLeds: numberOfLeds, matrixWidth: matrixWidth)
+            controller = WindowController(sequences: sequences, matrixWidth: matrixWidth, matrixHeight: matrixHeight)
         case .console:
-            controller = ConsoleController(sequences: sequences, numberOfLeds: numberOfLeds, matrixWidth: matrixWidth)
+            controller = ConsoleController(sequences: sequences, matrixWidth: matrixWidth, matrixHeight: matrixHeight)
         }
 
         controller.start()

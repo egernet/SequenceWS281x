@@ -9,13 +9,13 @@ import Foundation
 import rpi_ws281x_swift
 
 class ConsoleController: LedControllerProtocol {
-    let numberOfLeds: Int
+    var matrixHeight: Int
     let matrixWidth: Int
     let sequences: [SequenceType]
     let stop = false
 
-    init(sequences: [SequenceType], numberOfLeds: Int, matrixWidth: Int) {
-        self.numberOfLeds = numberOfLeds
+    init(sequences: [SequenceType], matrixWidth: Int, matrixHeight: Int) {
+        self.matrixHeight = matrixHeight
         self.matrixWidth = matrixWidth
         self.sequences = sequences
 
@@ -43,6 +43,7 @@ class ConsoleController: LedControllerProtocol {
     private func updatePixels() {
         let point = Point(x: 0, y: 1)
         Console.moveCursor(point)
+        sleep()
     }
 
     private func setPixelColor(point: Point, color: Color) {
@@ -53,10 +54,8 @@ class ConsoleController: LedControllerProtocol {
     }
 
     private func setPixelColor(pos: Int, color: Color) {
-        let count = numberOfLeds / matrixWidth
-        let y = pos / count
-        let x = pos - (y * count)
-        setPixelColor(point: .init(x: x, y: y), color: color)
+        let point = fromPostionToPoint(pos)
+        setPixelColor(point: point, color: color)
     }
 }
 
