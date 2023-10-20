@@ -31,7 +31,7 @@ class WS281xController: LedControllerProtocol {
         self.numberOfLeds = numberOfLeds
         self.matrixWidth = matrixWidth
         self.sequences = sequences
-        
+
         let ledCount = numberOfLeds / matrixWidth
         let strip = PixelStrip(
             numLEDs: Int32(ledCount),
@@ -103,11 +103,12 @@ class WS281xController: LedControllerProtocol {
                 strip.setPixelColor(pos: index, color: color)
             }
             strip.show()
+            Thread.sleep(forTimeInterval: 0.001)
         }
     }
 
     private func setPixelColor(point: Point, color: Color) {
-        colors[point.x][point.y] = color
+        colors[point.y][point.x] = color
     }
 
     private func setPixelColor(pos: Int, color: Color) {
