@@ -114,7 +114,7 @@ extension WS281xController: SequenceDelegate {
 extension WS281xController {
     private func setChannel(_ channel: Int) {
     #if os(Linux)
-        let number: UInt8 = UInt8(channel)
+        let number: UInt8 = UInt8(channel + 1) // Channel 0 is defect
         for i in 0..<3 {
             addressGPIO[i].value = Int(number >> i) & 1
         }
