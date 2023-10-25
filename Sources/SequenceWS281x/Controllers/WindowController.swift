@@ -15,7 +15,8 @@ class WindowController: LedControllerProtocol {
     var matrixHeight: Int
     let matrixWidth: Int
     let sequences: [SequenceType]
-    let ledSize: CGFloat = 30
+    let ledSize: CGFloat = 10
+    let margen: CGFloat = 10
 
     let window: NSWindow
     let contentView: LEDView
@@ -29,7 +30,8 @@ class WindowController: LedControllerProtocol {
 
         let numberOfLedOnRow = matrixHeight
         let mask: NSWindow.StyleMask = [.titled, .closable]
-        let rect: NSRect = .init(x: 0, y: 0, width: CGFloat(numberOfLedOnRow) * ledSize, height: CGFloat(matrixWidth) * ledSize)
+        let addMargen = (margen * 2)
+        let rect: NSRect = .init(x: 0, y: 0, width: CGFloat(numberOfLedOnRow) * ledSize + addMargen, height: CGFloat(matrixWidth) * ledSize + addMargen)
         self.window = NSWindow(contentRect: rect, styleMask: mask, backing: NSWindow.BackingStoreType.buffered, defer: false)
         self.window.title = "SequenceWS281x"
 
@@ -40,7 +42,7 @@ class WindowController: LedControllerProtocol {
 
     func setup() {
         window.contentView = contentView
-        contentView.setup(matrixWidth: matrixWidth, matrixHeight: matrixHeight, size: ledSize)
+        contentView.setup(matrixWidth: matrixWidth, matrixHeight: matrixHeight, size: ledSize, margen: margen)
 
         for var sequence in sequences {
             sequence.delegate = self
@@ -103,14 +105,14 @@ class LEDView: NSView {
     var leds: [Point: CAShapeLayer] = [:]
     var colors: [Color] = []
 
-    func setup(matrixWidth: Int, matrixHeight: Int, size: CGFloat) {
+    func setup(matrixWidth: Int, matrixHeight: Int, size: CGFloat, margen: CGFloat) {
         let mainlayer = CALayer()
         mainlayer.frame = self.bounds
 
         for y in 0..<matrixWidth {
             for x in 0..<matrixHeight {
                 let point: Point = .init(x: x, y: y)
-                let frame: CGRect = .init(x: point.cgPoint.x * size, y: point.cgPoint.y * size, width: size, height: size)
+                let frame: CGRect = .init(x: point.cgPoint.x * size + margen, y: point.cgPoint.y * size + margen, width: size, height: size)
 
                 let layer = CAShapeLayer()
                 layer.path = CGPath(ellipseIn: frame, transform: nil)

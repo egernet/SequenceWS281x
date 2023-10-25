@@ -36,7 +36,7 @@ struct SequenceWS281x: ParsableCommand {
     var matrixWidth: Int = 3
 
     @Option(help: "Matrix height")
-    var matrixHeight: Int = 10
+    var matrixHeight: Int = 155
 
     func run() {
         print("\u{1B}[2J")
