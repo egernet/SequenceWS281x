@@ -23,7 +23,7 @@ extension LedControllerProtocol {
         return .init(x: x, y: y)
     }
 
-    func sleep(forTimeInterval: TimeInterval = 0.001) {
+    func sleep(forTimeInterval: TimeInterval = 0.01) {
         Thread.sleep(forTimeInterval: forTimeInterval)
     }
 }
