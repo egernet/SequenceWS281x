@@ -36,14 +36,17 @@ struct SequenceWS281x: ParsableCommand {
     var matrixWidth: Int = 3
 
     @Option(help: "Matrix height")
-    var matrixHeight: Int = 165
+    var matrixHeight: Int = 55
 
     func run() {
         print("\u{1B}[2J")
         print("\u{1B}[\(1);\(0)HLED will start:")
 
         let sequences: [SequenceType] = [
-            TestColorSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
+            TwistSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
+            MatrixSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
+//            TestColorSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
+            TwistSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
             RainbowCycleSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight)
         ]
 

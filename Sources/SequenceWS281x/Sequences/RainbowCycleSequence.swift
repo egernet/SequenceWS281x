@@ -21,7 +21,7 @@ final class RainbowCycleSequence: SequenceType {
         rainbowCycle(matrixWidth: matrixWidth, matrixHeight: matrixHeight)
     }
 
-    private func rainbowCycle(matrixWidth: Int, matrixHeight: Int, iterations: Int = 1) {
+    private func rainbowCycle(matrixWidth: Int, matrixHeight: Int, iterations: Int = 10) {
         for i in 0..<255 * iterations {
             for y in 0..<matrixWidth {
                 for x in 0..<matrixHeight {
