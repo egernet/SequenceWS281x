@@ -88,6 +88,12 @@ class WS281xController: LedControllerProtocol {
     }
 
     private func setPixelColor(point: Point, color: Color) {
+        guard point.y >= 0 && point.x >= 0 else {
+            return
+        }
+        guard point.y < matrixWidth && point.x < matrixHeight else {
+            return
+        }
         colors[point.y][point.x] = color
     }
 
