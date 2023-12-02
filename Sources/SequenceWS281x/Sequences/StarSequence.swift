@@ -23,7 +23,7 @@ class Star: Equatable {
         time = time + value
 
         if time >= 1 {
-            value = -0.1
+            value = -0.2
         }
 
         if time <= 0 {
@@ -46,7 +46,7 @@ class Star: Equatable {
 }
 
 final class StarSequence: SequenceType {
-    let numberOfmatrixs = 200
+    let numberOfmatrixs = 300
     var delegate: SequenceDelegate?
     var number: Int = 0
     let matrixHeight: Int
@@ -96,9 +96,9 @@ final class StarSequence: SequenceType {
         }
 
         addStars()
+        addStars()
 
         delegate?.sequenceUpdatePixels(self)
-        Thread.sleep(forTimeInterval: 0.01)
     }
 
     private func addStars() {

@@ -80,7 +80,7 @@ class WindowController: NSWindowController, LedControllerProtocol {
             self.contentView.setNeedsDisplay(self.contentView.frame)
         }
 
-        sleep(forTimeInterval: 0.01)
+        sleep(forTimeInterval: 0.02)
     }
 
     private func setPixelColor(point: Point, color: Color) {
