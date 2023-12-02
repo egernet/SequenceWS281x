@@ -11,17 +11,19 @@ final class RainbowCycleSequence: SequenceType {
     var delegate: SequenceDelegate?
     let matrixHeight: Int
     let matrixWidth: Int
+    let iterations: Int
 
-    init(matrixWidth: Int, matrixHeight: Int) {
+    init(matrixWidth: Int, matrixHeight: Int, iterations: Int) {
         self.matrixHeight = matrixHeight
         self.matrixWidth = matrixWidth
+        self.iterations = iterations
     }
 
     func runSequence() {
-        rainbowCycle(matrixWidth: matrixWidth, matrixHeight: matrixHeight)
+        rainbowCycle(matrixWidth: matrixWidth, matrixHeight: matrixHeight, iterations: iterations)
     }
 
-    private func rainbowCycle(matrixWidth: Int, matrixHeight: Int, iterations: Int = 10) {
+    private func rainbowCycle(matrixWidth: Int, matrixHeight: Int, iterations: Int = 1) {
         for i in 0..<255 * iterations {
             for y in 0..<matrixWidth {
                 for x in 0..<matrixHeight {

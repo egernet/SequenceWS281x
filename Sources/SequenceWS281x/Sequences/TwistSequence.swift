@@ -12,10 +12,12 @@ final class TwistSequence: SequenceType {
     var delegate: SequenceDelegate?
     let matrixHeight: Int
     let matrixWidth: Int
+    let color: Color
 
-    init(matrixWidth: Int, matrixHeight: Int) {
+    init(matrixWidth: Int, matrixHeight: Int, color: Color = .white) {
         self.matrixHeight = matrixHeight
         self.matrixWidth = matrixWidth
+        self.color = color
     }
 
     func runSequence() {
@@ -27,7 +29,7 @@ final class TwistSequence: SequenceType {
         for point in 0..<matrixHeight {
             for width in 0..<matrixWidth {
                 for i in 0..<matrixHeight {
-                    delegate?.sequenceSetPixelColor(self, point: .init(x: i, y: width), color: point == i && row == width ? .white : .black )
+                    delegate?.sequenceSetPixelColor(self, point: .init(x: i, y: width), color: point == i && row == width ? color : .black )
                 }
             }
             

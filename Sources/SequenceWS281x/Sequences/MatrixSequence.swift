@@ -13,12 +13,13 @@ class TheMatrix: Equatable {
     let length: Int
     var posion: Point
     let speed: Int
-    let color: Color = .green
+    let color: Color
 
-    init(length: Int, posion: Point, speed: Int) {
+    init(color: Color, length: Int, posion: Point, speed: Int) {
         self.length = length
         self.posion = posion
         self.speed = speed
+        self.color = color
     }
 
     func getNextPoint() -> Point {
@@ -50,16 +51,18 @@ final class MatrixSequence: SequenceType {
     let matrixHeight: Int
     let matrixWidth: Int
     var matrixs: [TheMatrix] = []
+    let color: Color
 
     var canStop: Bool {
         return !(number > 0 || matrixs.isEmpty == false)
     }
 
-    init(matrixWidth: Int, matrixHeight: Int) {
+    init(matrixWidth: Int, matrixHeight: Int, color: Color) {
         self.matrixHeight = matrixHeight
         self.matrixWidth = matrixWidth
+        self.color = color
 
-        matrixs.append(.init(length: 3, posion: .init(x: matrixHeight, y: 0), speed: 1))
+        matrixs.append(.init(color: color, length: 3, posion: .init(x: matrixHeight, y: 0), speed: 1))
     }
 
     func runSequence() {
@@ -113,6 +116,7 @@ final class MatrixSequence: SequenceType {
             if startRow < matrixWidth {
                 self.matrixs.append(
                     .init(
+                        color: color,
                         length: Int.random(in: 1...TheMatrix.maxLength),
                         posion: .init(x: matrixHeight, y: startRow),
                         speed: Int.random(in: 1...2)
@@ -122,16 +126,5 @@ final class MatrixSequence: SequenceType {
 
             number = number - 1
         }
-    }
-}
-
-extension Color {
-    static func * (lhs: Color, rhs: Float) -> Color {
-        return .init(
-            red: UInt8(Float(lhs.red) * rhs),
-            green: UInt8(Float(lhs.green) * rhs),
-            blue: UInt8(Float(lhs.blue) * rhs),
-            white: UInt8(Float(lhs.white) * rhs)
-        )
     }
 }

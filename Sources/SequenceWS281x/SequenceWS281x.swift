@@ -43,11 +43,13 @@ struct SequenceWS281x: ParsableCommand {
         print("\u{1B}[\(1);\(0)HLED will start:")
 
         let sequences: [SequenceType] = [
-            TwistSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
-            MatrixSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
 //            TestColorSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
             TwistSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
-            RainbowCycleSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight)
+            StarSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, color: .white),
+            TwistSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
+            MatrixSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, color: .green),
+            TwistSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
+            RainbowCycleSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, iterations: 5)
         ]
 
         let executesMode: SequenceWS281xMode = .mode(mode)
