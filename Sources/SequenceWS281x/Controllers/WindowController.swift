@@ -11,14 +11,13 @@ import rpi_ws281x_swift
 import Cocoa
 import CoreGraphics
 
-class WindowController: LedControllerProtocol {
+class WindowController: NSWindowController, LedControllerProtocol {
     var matrixHeight: Int
     let matrixWidth: Int
     let sequences: [SequenceType]
     let ledSize: CGFloat = 10
     let margen: CGFloat = 10
 
-    let window: NSWindow
     let contentView: LEDView
 
     var applicationDelegate: ApplicationDelegate?
@@ -32,16 +31,22 @@ class WindowController: LedControllerProtocol {
         let mask: NSWindow.StyleMask = [.titled, .closable]
         let addMargen = (margen * 2)
         let rect: NSRect = .init(x: 0, y: 0, width: CGFloat(numberOfLedOnRow) * ledSize + addMargen, height: CGFloat(matrixWidth) * ledSize + addMargen)
-        self.window = NSWindow(contentRect: rect, styleMask: mask, backing: NSWindow.BackingStoreType.buffered, defer: false)
-        self.window.title = "SequenceWS281x"
+        let window = NSWindow(contentRect: rect, styleMask: mask, backing: .buffered, defer: false)
+        window.title = "SequenceWS281x"
 
         self.contentView = LEDView()
 
+        super.init(window: window)
+
         setup()
     }
-
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     func setup() {
-        window.contentView = contentView
+        window?.contentView = contentView
         contentView.setup(matrixWidth: matrixWidth, matrixHeight: matrixHeight, size: ledSize, margen: margen)
 
         for var sequence in sequences {
@@ -50,7 +55,8 @@ class WindowController: LedControllerProtocol {
     }
 
     func start() {
-        window.makeKeyAndOrderFront(self)
+        windowFrameAutosaveName = "position"
+        window?.makeKeyAndOrderFront(self)
 
         let application = NSApplication.shared
         application.setActivationPolicy(NSApplication.ActivationPolicy.regular)
@@ -59,6 +65,8 @@ class WindowController: LedControllerProtocol {
         application.delegate = applicationDelegate
         application.activate(ignoringOtherApps: true)
         application.run()
+
+        showWindow(application)
     }
 
     func runSequence() {
