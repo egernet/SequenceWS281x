@@ -45,24 +45,23 @@ class TheMatrix: Equatable {
 }
 
 final class MatrixSequence: SequenceType {
-    let numberOfmatrixs = 100
+    let numberOfmatrixs: Int
     var delegate: SequenceDelegate?
     var number: Int = 0
     let matrixHeight: Int
     let matrixWidth: Int
     var matrixs: [TheMatrix] = []
-    let color: Color
+    let colors: [Color]
 
     var canStop: Bool {
         return !(number > 0 || matrixs.isEmpty == false)
     }
 
-    init(matrixWidth: Int, matrixHeight: Int, color: Color) {
+    init(matrixWidth: Int, matrixHeight: Int, colors: [Color], numberOfmatrixs: Int = 100) {
         self.matrixHeight = matrixHeight
         self.matrixWidth = matrixWidth
-        self.color = color
-
-        matrixs.append(.init(color: color, length: 3, posion: .init(x: matrixHeight, y: 0), speed: 1))
+        self.colors = colors
+        self.numberOfmatrixs = numberOfmatrixs
     }
 
     func runSequence() {
@@ -110,6 +109,10 @@ final class MatrixSequence: SequenceType {
     }
 
     private func addMatrix() {
+        let index = Int.random(in: 0...colors.count-1)
+
+        let color = colors[index]
+
         if number > 0 {
             let startRow = Int.random(in: 0...matrixWidth)
 

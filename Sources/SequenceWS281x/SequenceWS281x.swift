@@ -47,7 +47,9 @@ struct SequenceWS281x: ParsableCommand {
             TwistSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
             StarSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, color: .white),
             TwistSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
-            MatrixSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, color: .green),
+            MatrixSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, colors: [.green], numberOfmatrixs: 150),
+//            TwistSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
+//            MatrixSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, colors: [.red, .red, .red, .red, .white], numberOfmatrixs: 200),
             TwistSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
             RainbowCycleSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, iterations: 5)
         ]
