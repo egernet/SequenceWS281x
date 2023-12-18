@@ -109,7 +109,7 @@ final class MatrixSequence: SequenceType {
     }
 
     private func addMatrix() {
-        let index = Int.random(in: 0...colors.count-1)
+        let index = Int.random(in: 0...(colors.count - 1))
 
         let color = colors[index]
 
