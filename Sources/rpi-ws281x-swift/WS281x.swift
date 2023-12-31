@@ -105,7 +105,10 @@ public struct Color {
     public static var green = Color(red: 0, green: 255, blue: 0)
     public static var blue = Color(red: 0, green: 0, blue: 255)
     public static var yallow = Color(red: 255, green: 255, blue: 0)
-    public static var pink = Color(red: 255, green: 192, blue: 203)
+    public static var pink = Color(red: 255, green: 0, blue: 0, white: 128)
+    public static var purple = Color(red: 128, green: 0, blue: 128)
+    public static var magenta = Color(red: 255, green: 0, blue: 255)
+    public static var orange = Color(red: 255, green: 165, blue: 0)
 
     public func printColor() {
         let colorInt: UInt32 = ws2811_led_t(color: self)
