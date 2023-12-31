@@ -52,7 +52,7 @@ final class TwistSequence: SequenceType {
         return matrixs.isEmpty == true
     }
 
-    init(matrixWidth: Int, matrixHeight: Int, color: Color = .white) {
+    init(matrixWidth: Int, matrixHeight: Int, color: Color = .trueWhite) {
         self.matrixHeight = matrixHeight
         self.matrixWidth = matrixWidth
         self.color = color
