@@ -45,15 +45,18 @@ struct SequenceWS281x: ParsableCommand {
         let sequences: [SequenceType] = [
 //            TestColorSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
             TwistSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
-            StarSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, color: .white),
-            TwistSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
-            MatrixSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, colors: [.green], numberOfmatrixs: 150),
-            TwistSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
-            MatrixSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, colors: [.green, .green, .red, .green, .green, .white, .yallow], numberOfmatrixs: 200),
-            TwistSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
-            RainbowCycleSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, iterations: 5),
-            TwistSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
-            MatrixSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, colors: [.red, .red, .red, .red, .white], numberOfmatrixs: 200)
+            FireworksSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, colors: [.white, .blue, .red, .yallow, .trueWhite, .pink]),
+
+//            TwistSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
+//            StarSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, color: .white),
+//            TwistSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
+//            MatrixSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, colors: [.green], numberOfmatrixs: 150),
+//            TwistSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
+//            MatrixSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, colors: [.green, .green, .red, .green, .green, .white, .yallow], numberOfmatrixs: 200),
+//            TwistSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
+//            RainbowCycleSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, iterations: 5),
+//            TwistSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
+//            MatrixSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, colors: [.red, .red, .red, .red, .white], numberOfmatrixs: 200)
         ]
 
         let executesMode: SequenceWS281xMode = .mode(mode)
