@@ -45,7 +45,7 @@ struct SequenceWS281x: ParsableCommand {
         let sequences: [SequenceType] = [
 //            TestColorSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
             TwistSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
-            FireworksSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, colors: [.white, .blue, .red, .yallow, .trueWhite, .pink]),
+            FireworksSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, colors: [.pink, .green, .blue, .red, .yallow, .trueWhite, .pink]),
 
 //            TwistSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
 //            StarSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, color: .white),

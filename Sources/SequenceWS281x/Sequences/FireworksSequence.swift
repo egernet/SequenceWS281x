@@ -59,7 +59,7 @@ class FireworksStar: Equatable {
 }
 
 final class FireworksSequence: SequenceType {
-    let numberOfmatrixs = 600
+    let numberOfmatrixs = 800
     var delegate: SequenceDelegate?
     var number: Int = 0
     let matrixHeight: Int
@@ -89,6 +89,10 @@ final class FireworksSequence: SequenceType {
 
     func reset() {
         var indexColor = Int.random(in: 0..<colors.count)
+        for _ in 0...colors.count {
+            indexColor = Int.random(in: 0..<colors.count)
+        }
+
         self.color = colors[indexColor]
         number = numberOfmatrixs
         stars = []
@@ -106,13 +110,13 @@ final class FireworksSequence: SequenceType {
         stars.forEach { star in
             delegate?.sequenceSetPixelColor(self, point: star.posion, color: star.getColor())
 
-            for i in 1...star.length {
-                delegate?.sequenceSetPixelColor(
-                    self,
-                    point: star.getTheTailPoint(of: i),
-                    color: star.getTheTailColor(of: i)
-                )
-            }
+//            for i in 1...star.length {
+//                delegate?.sequenceSetPixelColor(
+//                    self,
+//                    point: star.getTheTailPoint(of: i),
+//                    color: star.getTheTailColor(of: i)
+//                )
+//            }
 
             if star.isDone {
                 self.stars.removeAll(where: { $0 == star })
