@@ -19,6 +19,9 @@ The demo will show a matrix of 3 x 55 LED
 
 </br>
 or in window on you mac
+
+</br>
+
 <picture>
   <img alt="Demo gif" width="450" src="/../main/Doc/demo_mac.gif">
 </picture>
@@ -26,10 +29,10 @@ or in window on you mac
 </br>
 </br>
 
-You can now create sequences via JavaScript. The engine for running JavaScript is from ELK. The JavaScript engine is a lightweight engine
+You can now create sequences via __JavaScript__. The engine to running __JavaScript__ from __ELK__. The __JavaScript__ engine is a lightweight engine.
 
 </br>
 </br>
 
-See also [SwiftyGPIO](https://github.com/uraimo/SwiftyGPIO)
+See also [SwiftyGPIO](https://github.com/uraimo/SwiftyGPIO) </br>
 See also [JS engine](https://github.com/cesanta/elk)
