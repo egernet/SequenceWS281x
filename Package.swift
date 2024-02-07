@@ -37,6 +37,9 @@ let package = Package(
   ],
   targets: [
     .target(
+        name: "elk"
+    ),
+    .target(
         name: "rpi-ws281x"
     ),
     .target(
@@ -50,7 +53,11 @@ let package = Package(
         dependencies: [
             argumentParser,
             "rpi-ws281x-swift",
-            "SwiftyGPIO"
+            "SwiftyGPIO",
+            "elk"
+        ],
+        resources: [
+            .copy("SequencesJS")
         ],
         plugins: plugins
     )

@@ -110,14 +110,6 @@ final class FireworksSequence: SequenceType {
         stars.forEach { star in
             delegate?.sequenceSetPixelColor(self, point: star.posion, color: star.getColor())
 
-//            for i in 1...star.length {
-//                delegate?.sequenceSetPixelColor(
-//                    self,
-//                    point: star.getTheTailPoint(of: i),
-//                    color: star.getTheTailColor(of: i)
-//                )
-//            }
-
             if star.isDone {
                 self.stars.removeAll(where: { $0 == star })
             }

@@ -1,5 +1,5 @@
 //
-//  Color.swift 
+//  Color.swift
 //
 //  Created by Christian Skaarup Enevoldsen on 02/12/2023.
 //
