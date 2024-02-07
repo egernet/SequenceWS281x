@@ -29,7 +29,7 @@ or in window on you mac
 </br>
 </br>
 
-You can now create sequences via __JavaScript__. The engine to running __JavaScript__ from __ELK__. The __JavaScript__ engine is a lightweight engine.
+You can now create sequences via __JavaScript__. The engine to running __JavaScript__ from [__ELK__](https://github.com/cesanta/elk). The __JavaScript__ engine is a lightweight engine.
 
 </br>
 </br>
