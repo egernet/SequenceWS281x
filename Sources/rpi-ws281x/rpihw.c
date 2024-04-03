@@ -32,9 +32,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <string.h>
 
 #ifndef __APPLE__
-#include <string.h>
 #include <byteswap.h>
 #endif
 

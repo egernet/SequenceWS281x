@@ -69,7 +69,7 @@ ws2811_return_t ws2811_wait(ws2811_t *ws2811) {
     return WS2811_SUCCESS;
 }
 const char * ws2811_get_return_t_str(const ws2811_return_t state) {
-    return 0xFF;
+    return NULL;
 }
 void ws2811_set_custom_gamma_factor(ws2811_t *ws2811, double gamma_factor) {}
 

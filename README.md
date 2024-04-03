@@ -5,7 +5,11 @@ Swift wrapper for [rpi-ws281x-swift](https://github.com/apocolipse/rpi-ws281x-sw
 ## To run
 
 ```
-swift run
+swift run SequenceWS281x --mode app
+```
+or
+```
+swift run SequenceWS281x --mode console
 ```
 
 If you run this package on a __mac__ then the __SequenceWS281x__ will run ase a simulator.
