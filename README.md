@@ -33,6 +33,24 @@ or in window on you mac
 </br>
 </br>
 
+SequenceWS281x can be use with:
+
+```
+USAGE: sequenceWS281x [--mode <mode>] [--matrix-width <matrix-width>] [--matrix-height <matrix-height>]
+
+OPTIONS:
+  --mode <mode>           Executes mode: [real, app, console] (default: real)
+  --matrix-width <matrix-width>
+                          Matrix width (default: 3)
+  --matrix-height <matrix-height>
+                          Matrix height (default: 55)
+  --version               Show the version.
+  -h, --help              Show help information.
+```
+
+</br>
+</br>
+
 You can now create sequences via __JavaScript__. The engine to running __JavaScript__ from [__ELK__](https://github.com/cesanta/elk). The __JavaScript__ engine is a lightweight engine.
 
 </br>
