@@ -27,11 +27,10 @@ let iterations = 1;
 for(let i = 0; i < 255 * iterations; i++) {
     for(let y = 0; y < matrix.width; y++) {
         for(let x = 0; x < matrix.height; x++) {
-            let index = ((x * 255 / 55) + i) & 255;
+            let index = ((x * 255 / matrix.height) + i) & 255;
             let showColor = colorWheel( index );
             setPixelColor(showColor.red, showColor.green, showColor.blue, 0, x, y);
         }
     }
+    updatePixels();
 }
-
-updatePixels();

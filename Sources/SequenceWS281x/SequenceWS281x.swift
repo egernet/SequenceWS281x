@@ -7,6 +7,7 @@ struct SequenceWS281x: ParsableCommand {
         case real
         case app
         case console
+        case udp
 
         static func mode(_ string: String?) -> SequenceWS281xMode {
             switch string {
@@ -16,6 +17,8 @@ struct SequenceWS281x: ParsableCommand {
                 return .app
             case SequenceWS281xMode.console.rawValue:
                 return .console
+            case SequenceWS281xMode.udp.rawValue:
+                return .udp
             default:
                 return .real
             }
@@ -25,15 +28,15 @@ struct SequenceWS281x: ParsableCommand {
     static var configuration = CommandConfiguration(
         commandName: "sequenceWS281x",
         abstract: "Run sequence for WS281x",
-        version: "1.0",
+        version: "1.3",
         subcommands: []
     )
 
-    @Option(help: "Executes mode: [real, app, console]")
+    @Option(help: "Executes mode: [real, app, console, udp]")
     var mode: String = "real"
 
     @Option(help: "Matrix width")
-    var matrixWidth: Int = 3
+    var matrixWidth: Int = 8
 
     @Option(help: "Matrix height")
     var matrixHeight: Int = 55
@@ -67,6 +70,8 @@ struct SequenceWS281x: ParsableCommand {
             controller = WindowController(sequences: sequences, matrixWidth: matrixWidth, matrixHeight: matrixHeight)
         case .console:
             controller = ConsoleController(sequences: sequences, matrixWidth: matrixWidth, matrixHeight: matrixHeight)
+        case .udp:
+            controller = UDPController(sequences: sequences, matrixWidth: matrixWidth, matrixHeight: matrixHeight)
         }
 
         controller.start()

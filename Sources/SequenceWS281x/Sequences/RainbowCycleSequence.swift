@@ -34,6 +34,7 @@ final class RainbowCycleSequence: SequenceType {
             }
             
             delegate?.sequenceUpdatePixels(self)
+            Thread.sleep(forTimeInterval: 0.03)
         }
     }
 
