@@ -17,6 +17,13 @@ protocol SequenceType {
     var delegate: SequenceDelegate? {get set}
     var matrixWidth: Int {get}
     var matrixHeight: Int {get}
+    var name: String { get }
 
     func runSequence()
+}
+
+extension SequenceType {
+    var name: String {
+        String(describing: self)
+    }
 }

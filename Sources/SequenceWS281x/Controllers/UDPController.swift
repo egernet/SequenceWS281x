@@ -56,6 +56,7 @@ class UDPController: LedControllerProtocol {
 
     func runSequence() {
         for sequence in sequences {
+            print("Run sequence: \(sequence.name)")
             sequence.runSequence()
         }
     }
@@ -97,7 +98,12 @@ extension UDPController {
     private func startUDPServer() {
         let port: UInt16 = 24120
 
+#if os(Linux)
+        let serverSocket = CInt(socket(AF_INET, Int32(SOCK_DGRAM.rawValue), 0))
+#else
         let serverSocket = CInt(socket(AF_INET, Int32(SOCK_DGRAM), 0))
+#endif
+
         guard serverSocket != -1 else {
             perror("Could not create socket")
             exit(EXIT_FAILURE)
