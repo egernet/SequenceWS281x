@@ -7,6 +7,7 @@
 
 import Foundation
 import rpi_ws281x_swift
+import Network
 
 struct LEDInfo {
     let row: Int
@@ -22,11 +23,8 @@ class UDPController: LedControllerProtocol {
 
     var buffer: [LEDInfo] = []
 
-    var serverSources: [Int32: DispatchSourceRead] = [:]
-    
-    var lenTest: socklen_t?
-    var paddr: UnsafeMutablePointer<sockaddr>?
-    var sTest: Int32?
+    var connection: NWConnection?
+    var listener: NWListener?
 
     init(sequences: [SequenceType], matrixWidth: Int, matrixHeight: Int) {
         self.matrixHeight = matrixHeight
@@ -96,94 +94,59 @@ extension UDPController: SequenceDelegate {
 extension UDPController {
 
     private func startUDPServer() {
-        let port: UInt16 = 24120
+        let port: NWEndpoint.Port = 2412
 
-#if os(Linux)
-        let serverSocket = CInt(socket(AF_INET, Int32(SOCK_DGRAM.rawValue), 0))
-#else
-        let serverSocket = CInt(socket(AF_INET, Int32(SOCK_DGRAM), 0))
-#endif
+        let udpQueue = DispatchQueue(label: "udpQueue")
+        guard let listener = try? NWListener(using: .udp, on: port) else { return }
 
-        guard serverSocket != -1 else {
-            perror("Could not create socket")
-            exit(EXIT_FAILURE)
+        listener.newConnectionHandler = { [weak self] connection in
+            connection.start(queue: udpQueue)
+
+            connection.receiveMessage { data, _, _, _ in
+                if let data = data, !data.isEmpty {
+                    let message = String(decoding: data, as: UTF8.self)
+                    print("Client have conncted: \(message)")
+                }
+            }
+
+            connection.stateUpdateHandler = { newState in
+                switch newState {
+                case .ready:
+                    print("Connection is ready to use")
+                case .cancelled:
+                    print("Connection cancelled")
+                case .failed(let error):
+                    print("Connection failed: \(error)")
+                default:
+                    break
+                }
+            }
+
+            self?.connection = connection
         }
 
-        var serverAddress = sockaddr_in()
-        serverAddress.sin_family = sa_family_t(AF_INET)
-        serverAddress.sin_addr.s_addr = inet_addr("0.0.0.0") // Listen on all network interfaces
-        serverAddress.sin_port = port.bigEndian
-
-        let bindResult = withUnsafePointer(to: &serverAddress) {
-            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) { addressPointer in
-                bind(serverSocket, addressPointer, socklen_t(MemoryLayout<sockaddr_in>.size))
+        listener.stateUpdateHandler = { newState in
+            switch newState {
+            case .ready:
+                print("The UDP server is started on port \(port)")
+            case .failed(let error):
+                print("Error starting the listener: \(error)")
+            default:
+                break
             }
         }
+        listener.start(queue: .global())
 
-        guard bindResult != -1 else {
-            perror("Could not bind socket to address and port")
-            exit(EXIT_FAILURE)
-        }
-
-        print("UDP-serveren is started on port \(port)")
-
-        let serverSource = DispatchSource.makeReadSource(fileDescriptor: serverSocket)
-        serverSource.setEventHandler {
-
-            var info = sockaddr_storage()
-            var len = socklen_t(MemoryLayout<sockaddr_storage>.size)
-
-            let s = Int32(serverSource.handle)
-            var buffer = [UInt8](repeating: 0, count: 1024)
-
-            withUnsafeMutablePointer(to: &info, { pinfo -> () in
-                let paddr = UnsafeMutableRawPointer(pinfo).assumingMemoryBound(to: sockaddr.self)
-                let received = recvfrom(s, &buffer, buffer.count, 0, paddr, &len)
-
-                if received < 0 {
-                    return
-                }
-
-                let text: String = String(cString: buffer)
-                print("Client have conncted: \(text)")
-
-                self.sTest = s
-                self.lenTest = len
-                self.paddr = paddr
-
-//                        var totalSended = 0
-//                        repeat {
-//
-//                            let sended = sendto(s, &buffer, received - totalSended, 0, paddr, len)
-//                            if sended < 0 {
-//                                return
-//                            }
-//                            totalSended += sended
-//                        } while totalSended < received
-            })
-        }
-
-        serverSources[serverSocket] = serverSource
-        serverSource.resume()
+        self.listener = listener
     }
 
     func stopUDPServer() {
-        for (socket, source) in serverSources {
-            source.cancel()
-            close(socket)
-            print(socket, "\tclosed")
-        }
-        serverSources.removeAll()
-    }
-
-    func cancelSource() {
-        guard let s = sTest else { return }
-        let serverSource = serverSources.first(where: { $0.key == s })?.value
-        serverSource?.cancel()
+        listener?.cancel()
+        print("Connection is cancelled")
     }
 
     func sendColor() {
-        guard let s = sTest, let paddr, let len = lenTest else { return }
+        guard let connection else { return }
 
         let data = self.buffer
         self.buffer = []
@@ -195,13 +158,11 @@ extension UDPController {
         let chunks = buffer.chunked(into: 1032)
 
         chunks.forEach { buffer in
-            let bytesSent = sendto(s, buffer, buffer.count, 0, paddr, len)
-            if bytesSent == -1 {
-                cancelSource()
-                sTest = nil
-                self.paddr = nil
-                lenTest = nil
-            }
+            connection.send(content: Data(buffer), completion: .contentProcessed { error in
+                if let error = error {
+                    print("Error sending response: \(error)")
+                }
+            })
         }
     }
 }
