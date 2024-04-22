@@ -69,7 +69,7 @@ final class TwistSequence: SequenceType {
     func reset() {
         matrixs = []
 
-        for i in 0...2 {
+        for i in 0..<matrixWidth {
             matrixs.append(.init(color: color, posion: .init(x: -i, y: i)))
         }
     }
