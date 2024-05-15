@@ -4,6 +4,9 @@
 import PackageDescription
 
 let argumentParser: Target.Dependency = .product(name: "ArgumentParser", package: "swift-argument-parser")
+let nioCore: Target.Dependency = .product(name: "NIOCore", package: "swift-nio")
+let nioPosix: Target.Dependency = .product(name: "NIOPosix", package: "swift-nio")
+let nioTransportServices: Target.Dependency = .product(name: "NIOTransportServices", package: "swift-nio-transport-services")
 
 let plugins: [Target.PluginUsage]? = {
 #if os(OSX)
@@ -28,12 +31,14 @@ let package = Package(
   platforms: platforms,
   products: [
     .executable(name: "SequenceWS281x", targets: ["SequenceWS281x"]),
-    .library(name: "rpi-ws281x-swift", targets: ["rpi-ws281x-swift"]),
+    .library(name: "rpi-ws281x-swift", targets: ["rpi-ws281x-swift"])
   ],
   dependencies: [
     .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.1.3"),
     .package(url: "https://github.com/realm/SwiftLint", from: "0.52.2"),
-    .package(url: "https://github.com/uraimo/SwiftyGPIO.git", from: "1.0.0")
+    .package(url: "https://github.com/uraimo/SwiftyGPIO.git", from: "1.0.0"),
+    .package(url: "https://github.com/apple/swift-nio.git", from: "2.0.0"),
+    .package(url: "https://github.com/apple/swift-nio-transport-services.git", from: "1.13.0")
   ],
   targets: [
     .target(
@@ -54,7 +59,10 @@ let package = Package(
             argumentParser,
             "rpi-ws281x-swift",
             "SwiftyGPIO",
-            "elk"
+            "elk",
+            nioCore,
+            nioPosix,
+            nioTransportServices
         ],
         resources: [
             .copy("SequencesJS")

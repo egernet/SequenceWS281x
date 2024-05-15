@@ -7,7 +7,7 @@ struct SequenceWS281x: ParsableCommand {
         case real
         case app
         case console
-        case udp
+        case server
 
         static func mode(_ string: String?) -> SequenceWS281xMode {
             switch string {
@@ -17,8 +17,8 @@ struct SequenceWS281x: ParsableCommand {
                 return .app
             case SequenceWS281xMode.console.rawValue:
                 return .console
-            case SequenceWS281xMode.udp.rawValue:
-                return .udp
+            case SequenceWS281xMode.server.rawValue:
+                return .server
             default:
                 return .real
             }
@@ -32,7 +32,7 @@ struct SequenceWS281x: ParsableCommand {
         subcommands: []
     )
 
-    @Option(help: "Executes mode: [real, app, console, udp]")
+    @Option(help: "Executes mode: [real, app, console, server]")
     var mode: String = "real"
 
     @Option(help: "Matrix width")
@@ -46,17 +46,17 @@ struct SequenceWS281x: ParsableCommand {
         print("\u{1B}[\(1);\(0)HLED will start:")
 
         let sequences: [SequenceType] = [
-            JSSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, jsFile: "rainbow.js"),
-            TestColorSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
-            TwistSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
-            FireworksSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, colors: [.pink, .green, .blue, .red, .yallow, .trueWhite, .purple, .magenta, .orange]),
-
-            TwistSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
-            StarSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, color: .trueWhite),
-            MatrixSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, colors: [.green], numberOfmatrixs: 150),
-            MatrixSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, colors: [.green, .green, .red, .green, .green, .trueWhite, .yallow], numberOfmatrixs: 200),
-            MatrixSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, colors: [.red, .red, .red, .red, .trueWhite], numberOfmatrixs: 200),
-            RainbowCycleSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, iterations: 5)
+//            JSSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, jsFile: "rainbow.js"),
+            TestColorSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight)//,
+//            TwistSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
+//            FireworksSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, colors: [.pink, .green, .blue, .red, .yallow, .trueWhite, .purple, .magenta, .orange]),
+//
+//            TwistSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight),
+//            StarSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, color: .trueWhite),
+//            MatrixSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, colors: [.green], numberOfmatrixs: 150),
+//            MatrixSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, colors: [.green, .green, .red, .green, .green, .trueWhite, .yallow], numberOfmatrixs: 200),
+//            MatrixSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, colors: [.red, .red, .red, .red, .trueWhite], numberOfmatrixs: 200),
+//            RainbowCycleSequence(matrixWidth: matrixWidth, matrixHeight: matrixHeight, iterations: 5)
         ]
 
         let executesMode: SequenceWS281xMode = .mode(mode)
@@ -70,8 +70,8 @@ struct SequenceWS281x: ParsableCommand {
             controller = WindowController(sequences: sequences, matrixWidth: matrixWidth, matrixHeight: matrixHeight)
         case .console:
             controller = ConsoleController(sequences: sequences, matrixWidth: matrixWidth, matrixHeight: matrixHeight)
-        case .udp:
-            controller = UDPController(sequences: sequences, matrixWidth: matrixWidth, matrixHeight: matrixHeight)
+        case .server:
+            controller = LedServerController(sequences: sequences, matrixWidth: matrixWidth, matrixHeight: matrixHeight)
         }
 
         controller.start()
