@@ -91,9 +91,11 @@ class UDPHandler: ChannelInboundHandler {
 
         for ptr in sequence(first: firstAddr, next: { $0.pointee.ifa_next }) {
             let flags = Int32(ptr.pointee.ifa_flags)
-            if (flags & (IFF_UP | IFF_RUNNING | IFF_LOOPBACK)) == (IFF_UP | IFF_RUNNING) {
+            let a = Int32(IFF_UP | IFF_RUNNING | IFF_LOOPBACK)
+            let b = Int32(IFF_UP | IFF_RUNNING)
+            if (flags & a) == b {
                 if let sa = ptr.pointee.ifa_addr {
-                    switch sa.pointee.sa_family {
+                    switch UInt8(sa.pointee.sa_family) {
                     case UInt8(AF_INET):
                         var addr = sa.withMemoryRebound(to: sockaddr_in.self, capacity: 1) { $0.pointee }
                         var buf = [CChar](repeating: 0, count: Int(INET_ADDRSTRLEN))
