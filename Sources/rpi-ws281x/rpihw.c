@@ -54,6 +54,10 @@
 #define RPI_MANUFACTURER_MASK                    (0xf << 16)
 #define RPI_WARRANTY_MASK                        (0x3 << 24)
 
+#define PERIPH_BASE_OPI                          0x01C00000  // Allwinner H616 Peripheral Base
+#define GPIO_BASE_OPI                            0x01C20800  // GPIO Base for Allwinner H616
+#define PWM_BASE_OPI                             0x01C21400  // PWM Base for Allwinner H616
+
 static const rpi_hw_t rpi_hw_info[] = {
     //
     // Raspberry Pi 400
@@ -508,8 +512,16 @@ static const rpi_hw_t rpi_hw_info[] = {
         .videocore_base = VIDEOCORE_BASE_RPI2,
         .desc = "Compute Module 3+",
     },
-
-
+    //
+    // Orange Pi Zero 2
+    //
+    {
+        .hwver  = 0x01c00000,  // Din base-adresse eller en unik værdi
+        .type = OPI_HWVER_TYPE_H616,
+        .periph_base = PERIPH_BASE_OPI,
+        .videocore_base = 0,  // Ikke relevant for Orange Pi
+        .desc = "Orange Pi Zero 2",
+    }
 };
 
 
