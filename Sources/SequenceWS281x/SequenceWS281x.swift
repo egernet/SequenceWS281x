@@ -7,7 +7,6 @@ struct SequenceWS281x: ParsableCommand {
         case real
         case app
         case console
-        case server
 
         static func mode(_ string: String?) -> SequenceWS281xMode {
             switch string {
@@ -17,8 +16,6 @@ struct SequenceWS281x: ParsableCommand {
                 return .app
             case SequenceWS281xMode.console.rawValue:
                 return .console
-            case SequenceWS281xMode.server.rawValue:
-                return .server
             default:
                 return .real
             }
@@ -28,7 +25,7 @@ struct SequenceWS281x: ParsableCommand {
     static var configuration = CommandConfiguration(
         commandName: "sequenceWS281x",
         abstract: "Run sequence for WS281x",
-        version: "1.3",
+        version: "1.4.0",
         subcommands: []
     )
 
@@ -72,8 +69,6 @@ struct SequenceWS281x: ParsableCommand {
             controller = WindowController(sequences: sequences, matrixWidth: matrixWidth, matrixHeight: matrixHeight)
         case .console:
             controller = ConsoleController(sequences: sequences, matrixWidth: matrixWidth, matrixHeight: matrixHeight)
-        case .server:
-            controller = LedServerController(sequences: sequences, matrixWidth: matrixWidth, matrixHeight: matrixHeight)
         }
 
         controller.start()
