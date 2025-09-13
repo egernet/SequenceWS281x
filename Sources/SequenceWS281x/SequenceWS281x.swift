@@ -29,7 +29,7 @@ struct SequenceWS281x: ParsableCommand {
         subcommands: []
     )
 
-    @Option(help: "Executes mode: [real, app, console, server]")
+    @Option(help: "Executes mode: [real, app, console]")
     var mode: String = "real"
 
     @Option(help: "Matrix width")
