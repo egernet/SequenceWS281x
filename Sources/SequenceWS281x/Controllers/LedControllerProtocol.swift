@@ -8,7 +8,7 @@ import Foundation
 
 protocol LedControllerProtocol {
     var matrixWidth: Int { get }
-    var matrixHeight: Int {get}
+    var matrixHeight: Int { get }
     var sequences: [SequenceType] { get }
 
     func start()
