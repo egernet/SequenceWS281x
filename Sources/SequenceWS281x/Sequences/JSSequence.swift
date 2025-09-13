@@ -23,7 +23,7 @@ final class JSSequence: SequenceType {
     private let bufferSize: Int
     private var code: String?
 
-    init(matrixWidth: Int, matrixHeight: Int, jsFile: String, bufferSize: Int = 16384) {
+    init(matrixWidth: Int, matrixHeight: Int, jsFile: String, bufferSize: Int = 65536) {
         self.matrixHeight = matrixHeight
         self.matrixWidth = matrixWidth
         self.bufferSize = bufferSize

@@ -21,6 +21,7 @@ class LedServerController: LedControllerProtocol {
     let matrixWidth: Int
     let sequences: [SequenceType]
     let stop = false
+    var timer: Timer?
 
     var buffer: [LEDInfo] = []
 
@@ -50,16 +51,27 @@ class LedServerController: LedControllerProtocol {
     }
 
     func start() {
-        Task {
-            try? ipEchoController.start(port: 3112)
+        DispatchQueue.global().async { [weak self] in
+            do {
+                try self?.ipEchoController.start(port: 3112)
+            } catch {
+                print("Failed to start UDP-server: \(error)")
+            }
         }
 
         Task {
             await self.startTCPServer()
         }
 
+        Task {
+            while stop == false {
+                runSequence()
+            }
+        }
+
         while stop == false {
-            runSequence()
+            sendColor()
+            sleep(forTimeInterval: 0.033)
         }
     }
 
@@ -71,7 +83,6 @@ class LedServerController: LedControllerProtocol {
     }
 
     private func updatePixels() {
-        self.sendColor()
         sleep()
     }
 
@@ -103,7 +114,6 @@ extension LedServerController: SequenceDelegate {
 }
 
 extension LedServerController {
-
     private func startTCPServer() async {
         let bootstrap = ServerBootstrap(group: group)
             .serverChannelOption(ChannelOptions.backlog, value: 256)
@@ -137,18 +147,14 @@ extension LedServerController {
     }
 
     func sendColor() {
-        let data = self.buffer
-        self.buffer = []
+        let data = self.buffer.filter({ $0.col == 4 })
+//        self.buffer = []
 
         let buffer: [UInt8] = data.flatMap({
             return [UInt8($0.row), UInt8($0.col), $0.color.red, $0.color.green, $0.color.blue, $0.color.white]
         })
 
-        let chunks = buffer.chunked(into: 1032)
-
-        chunks.forEach { dataBuffer in
-            tcpHandler.sendDataToAll(dataBuffer)
-        }
+        tcpHandler.sendFrameToAll(buffer)
     }
 }
 
@@ -163,61 +169,23 @@ extension Array {
     }
 }
 
-//extension UDPController: ChannelInboundHandler {
-//    typealias InboundIn = AddressedEnvelope<ByteBuffer>
-//    typealias OutboundOut = AddressedEnvelope<ByteBuffer>
-//
-//    public func channelRead(context: ChannelHandlerContext, data: NIOAny) {
-//        let envelope = unwrapInboundIn(data)
-//        let message = envelope.data.getString(at: 0, length: envelope.data.readableBytes) ?? "No text"
-//        print("Message from client: \(message)")
-//
-//        var isGoUp = true
-//        var count: UInt8 = 0
-//        context.eventLoop.scheduleRepeatedTask(initialDelay: .zero, delay: .milliseconds(30)) { _ in
-//            let dataBuffer: [UInt8] = [4, 4, 0, 0, count, 0]
-//            var buffer = ByteBufferAllocator().buffer(capacity: dataBuffer.count)
-//            buffer.writeBytes(dataBuffer)
-//
-//            let response = AddressedEnvelope(remoteAddress: envelope.remoteAddress, data: buffer)
-//
-//            context.writeAndFlush(self.wrapOutboundOut(response), promise: nil)
-//
-//            if count == 0 && isGoUp == false {
-//                isGoUp = true
-//            } else if count == 255 {
-//                isGoUp = false
-//            }
-//
-//            if isGoUp {
-//                count += 1
-//            } else {
-//                count -= 1
-//            }
-//        }
-//    }
-//
-//    public func channelReadComplete(context: ChannelHandlerContext) {
-//        // As we are not really interested getting notified on success or failure we just pass nil as promise to
-//        // reduce allocations.
-//        context.flush()
-//    }
-//
-//    public func errorCaught(context: ChannelHandlerContext, error: Error) {
-//        print("error: ", error)
-//
-//        // As we are not really interested getting notified on success or failure we just pass nil as promise to
-//        // reduce allocations.
-//        context.close(promise: nil)
-//    }
-//}
-
 class TCPHandler: ChannelInboundHandler {
+    enum Command: UInt8 {
+        case timestamp = 128
+        case frame = 129
+        case title = 130
+        case restart = 131
+    }
+
     typealias InboundIn = ByteBuffer
     typealias OutboundOut = ByteBuffer
 
     private let channelsSyncQueue = DispatchQueue(label: "channelsQueue")
     private var channels: [ObjectIdentifier: Channel] = [:]
+
+    var timestamp: TimeInterval {
+        return Date().timeIntervalSince1970
+    }
 
     public func channelActive(context: ChannelHandlerContext) {
         let channel = context.channel
@@ -245,6 +213,17 @@ class TCPHandler: ChannelInboundHandler {
                 task.cancel()
             }
         }
+
+        sendTimestampToChannel(channel)
+    }
+
+    func sendFrameToAll(_ dataBuffer: [UInt8]) {
+        let chunks = dataBuffer.chunked(into: 252)
+
+        chunks.forEach { dataBuffer in
+            let byte: [UInt8] = [Command.frame.rawValue, UInt8(dataBuffer.count)] + dataBuffer
+            sendDataToAll(byte)
+        }
     }
 
     func sendDataToAll(_ dataBuffer: [UInt8]) {
@@ -254,5 +233,31 @@ class TCPHandler: ChannelInboundHandler {
         channels.values.forEach { channel in
             channel.writeAndFlush(self.wrapOutboundOut(buffer), promise: nil)
         }
+    }
+
+    func sendTimestampToChannel(_ channel: any Channel) {
+        let bytes = timestamp.timeIntervalToBytes()
+        let dataBuffer: [UInt8] = [Command.timestamp.rawValue, UInt8(bytes.count)] + bytes
+
+        var buffer = ByteBufferAllocator().buffer(capacity: dataBuffer.count)
+        buffer.writeBytes(dataBuffer)
+
+        channel.writeAndFlush(self.wrapOutboundOut(buffer), promise: nil)
+    }
+}
+
+extension TimeInterval {
+    func timeIntervalToBytes() -> [UInt8] {
+        var timeInterval = self
+        let size = MemoryLayout<TimeInterval>.size
+        var byteArray = [UInt8](repeating: 0, count: size)
+
+        withUnsafeBytes(of: &timeInterval) { buffer in
+            for (index, byte) in buffer.enumerated() {
+                byteArray[index] = byte
+            }
+        }
+
+        return byteArray
     }
 }
