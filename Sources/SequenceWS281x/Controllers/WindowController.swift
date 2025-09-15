@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  WindowController.swift
 //
 //  Created by Christian Skaarup Enevoldsen on 05/10/2023.
 //
