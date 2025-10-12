@@ -22,3 +22,16 @@ protocol LedControllerProtocol {
     /// Begin run the sequences
     func runSequence()
 }
+
+extension LedControllerProtocol {
+    func fromPostionToPoint(_ pos: Int) -> Point {
+        let y = pos / matrixHeight
+        let x = pos - (y * matrixHeight)
+
+        return .init(x: x, y: y)
+    }
+
+    func sleep(forTimeInterval: TimeInterval = 0.01) {
+        Thread.sleep(forTimeInterval: forTimeInterval)
+    }
+}
